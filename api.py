@@ -9,9 +9,12 @@ Functions:
     * récupérer_partie - Retrouver l'état d'une partie spécifique.
     * jouer_coup - Exécute un coup et retourne le nouvel état de jeu.
 """
+import requests
+
 parties_precedente = 'https://pax.ulaval.ca/quixo/api/h24/parties'
 
-import requests
+# Définir le délai d'attente à 5 secondes
+TIMEOUT = 5
 
 URL = "https://pax.ulaval.ca/quixo/api/h24/"
 
@@ -34,7 +37,7 @@ def lister_parties(idul, secret):
     """
 
     url = f"{URL}parties"
-    reponse = requests.get(url, params={"idul": idul, "secret": secret})
+    reponse = requests.get(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
         return reponse.json()["parties"]
@@ -63,7 +66,7 @@ def débuter_partie(idul,  secret):
             de la liste des joueurs et de l'état du plateau.
     """
     url = f"{URL}parties"
-    reponse = requests.post(url, params={"idul": idul, "secret": secret})
+    reponse = requests.post(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
         data = reponse.json()
@@ -95,7 +98,7 @@ def récupérer_partie(id_partie, idul, secret):
     """
 
     url = f"{URL}parties/{id_partie}"
-    reponse = requests.get(url, params={"idul": idul, "secret": secret})
+    reponse = requests.get(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
         data = reponse.json()
@@ -134,7 +137,7 @@ def jouer_coup(id_partie, origine, direction, idul, secret):
     """
     url = f"{URL}jouer"
     data = {"id": id_partie, "origine": origine, "direction": direction}
-    reponse = requests.put(url, auth=(idul, secret), json=data)
+    reponse = requests.put(url, auth=(idul, secret), json=data, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
         data = reponse.json()
