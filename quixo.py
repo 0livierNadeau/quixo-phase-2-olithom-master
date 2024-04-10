@@ -91,15 +91,16 @@ class Quixo:
 
 def analyser_commande():
     """Génère un interpréteur de commande.
+
     Returns:
         Namespace: Un objet Namespace tel que retourné par parser.parse_args().
-            Cet objet aura l'attribut «idul» représentant l'idul du joueur
-            et l'attribut «parties» qui est un booléen True/False.
+                   Cet objet aura l'attribut «idul» représentant l'idul du joueur
+                   et l'attribut «parties» qui est un booléen True/False.
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Quixo")
 
-    # Complétez le code ici
-    # vous pourriez aussi avoir à ajouter des arguments dans ArgumentParser(...)
+    parser.add_argument("idul", help="IDUL du joueur")
+    parser.add_argument("-p", "--parties", action="store_true", help="Lister les parties existantes")
 
     return parser.parse_args()
 
@@ -115,4 +116,9 @@ def formater_les_parties(parties):
     Returns:
         str: Représentation des parties
     """
-    pass
+    lignes = []
+    for i, partie in enumerate(parties, 1):
+        joueurs = " vs ".join(partie["joueurs"])
+        gagnant = f", gagnant: {partie['gagnant']}" if partie['gagnant'] else ""
+        lignes.append(f"{i:2} : {partie['date']}, {joueurs}{gagnant}")
+    return "\n".join(lignes)
