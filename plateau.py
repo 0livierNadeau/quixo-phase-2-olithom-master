@@ -111,7 +111,20 @@ class Plateau:
             QuixoError: La direction doit être "haut", "bas", "gauche" ou "droite".
             QuixoError: Le pion à insérer doit être "X" ou "O".
         """
-        pass
+        if not isinstance(pion, str) or pion not in ("X", "O"):
+            raise QuixoError("Le pion à insérer doit être 'X' ou 'O'.")
+
+        if not isinstance(direction, str) or direction not in ("haut", "bas", "gauche", "droite"):
+            raise QuixoError("La direction doit être 'haut', 'bas', 'gauche' ou 'droite'.")
+
+        if direction == "haut":
+            self.insertion_par_le_haut(pion, origine)
+        elif direction == "bas":
+            self.insertion_par_le_bas(pion, origine)
+        elif direction == "gauche":
+            self.insertion_par_la_gauche(pion, origine)
+        else:
+            self.insertion_par_la_droite(pion, origine)
 
     def insertion_par_le_bas(self, pion, origine):
         """Insère un pion dans le plateau en direction du bas
@@ -120,7 +133,11 @@ class Plateau:
             pion (str): La valeur du pion à insérer, soit "X" ou "O".
             origine (list[int]): La position [x, y] d'origine du pion à insérer.
         """
-        pass
+        x, y = origine
+        self[x, y] = pion
+        for i in range(y - 1, -1, -1):
+            self[x, i + 1] = self[x, i]
+        self[x, 0] = " "
 
     def insertion_par_le_haut(self, pion, origine):
         """Insère un pion dans le plateau en direction du haut
@@ -129,7 +146,12 @@ class Plateau:
             pion (str): La valeur du pion à insérer, soit "X" ou "O".
             origine (list[int]): La position [x, y] d'origine du pion à insérer.
         """
-        pass
+        x, y = origine
+        self[x, y] = pion
+        for i in range(y + 1, 5):
+            self[x, i - 1] = self[x, i]
+        self[x, 4] = " "
+
 
     def insertion_par_la_gauche(self, pion, origine):
         """Insère un pion dans le plateau en direction de la gauche
@@ -138,7 +160,11 @@ class Plateau:
             pion (str): La valeur du pion à insérer, soit "X" ou "O".
             origine (list[int]): La position [x, y] d'origine du pion à insérer.
         """
-        pass
+        x, y = origine
+        self[x, y] = pion
+        for i in range(x - 1, -1, -1):
+            self[i + 1, y] = self[i, y]
+        self[0, y] = " "
 
     def insertion_par_la_droite(self, pion, origine):
         """Insère un pion dans le plateau en direction de la droite
@@ -147,4 +173,8 @@ class Plateau:
             pion (str): La valeur du pion à insérer, soit "X" ou "O".
             origine (list[int]): La position [x, y] d'origine du pion à insérer.
         """
-        pass
+        x, y = origine
+        self[x, y] = pion
+        for i in range(x + 1, 5):
+            self[i - 1, y] = self[i, y]
+        self[4, y] = " "
