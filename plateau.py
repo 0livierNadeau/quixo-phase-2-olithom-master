@@ -58,7 +58,10 @@ class Plateau:
         Raises:
             QuixoError: Les positions x et y doivent être entre 1 et 5 inclusivement.
         """
-        pass
+        x, y = position
+        if not (1 <= x <= 5 and 1 <= y <= 5):
+            raise QuixoError("Les positions x et y doivent être entre 1 et 5 inclusivement.")
+        return self.plateau[y - 1][x - 1]
 
     def __setitem__(self, position, valeur):
         """Modifie la valeur à la position donnée
@@ -71,7 +74,12 @@ class Plateau:
             QuixoError: Les positions x et y doivent être entre 1 et 5 inclusivement.
             QuixoError: La valeur donnée doit être "X", "O" ou " ".
         """
-        pass
+        x, y = position
+        if not (1 <= x <= 5 and 1 <= y <= 5):
+            raise QuixoError("Les positions x et y doivent être entre 1 et 5 inclusivement.")
+        if valeur not in ("X", "O", " "):
+            raise QuixoError("La valeur donnée doit être 'X', 'O' ou ' '.")
+        self.plateau[y - 1][x - 1] = valeur
 
     def construire_plateau(self, plateau):
         """Construit un plateau de jeu
@@ -91,7 +99,19 @@ class Plateau:
             QuixoError: Le plateau doit être une liste de 5 listes de 5 éléments.
             QuixoError: Les éléments du plateau doivent être "X", "O" ou " ".
         """
-        pass
+        if plateau is None:
+            return [[" " for _ in range(5)] for _ in range(5)]
+
+        if not isinstance(plateau, list) or len(plateau) != 5:
+            raise QuixoError("Le plateau doit être une liste de 5 listes de 5 éléments.")
+        for ligne in plateau:
+            if not isinstance(ligne, list) or len(ligne) != 5:
+                raise QuixoError("Le plateau doit être une liste de 5 listes de 5 éléments.")
+            for element in ligne:
+                if element not in ("X", "O", " "):
+                    raise QuixoError("Les éléments du plateau doivent être 'X', 'O' ou ' '.")
+
+        return plateau
 
     def insertion(self, pion, origine, direction):
         """Insère un pion dans le plateau

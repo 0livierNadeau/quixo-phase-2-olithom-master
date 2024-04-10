@@ -53,7 +53,9 @@ class Quixo:
         Returns:
             str: Une représentation en chaîne de caractères du plateau.
         """
-        pass
+        legende = formater_legende(self.joueurs)
+        jeu = formater_jeu(self.plateau)
+        return legende + "\n" + jeu
 
     def déplacer_pion(self, pion, origine, direction):
         """Déplacer un pion dans une direction donnée.
@@ -65,7 +67,10 @@ class Quixo:
             origine (list[int]): La position (x, y) du pion sur le plateau.
             direction (str): La direction du déplacement, soit "haut", "bas", "gauche" ou "droite".
         """
-        pass
+        try:
+            self.plateau.insertion(pion, origine, direction)
+        except QuixoError as e:
+            raise e
 
     def récupérer_le_coup(self):
         """Demander le prochain coup à jouer au joueur.
@@ -86,7 +91,10 @@ class Quixo:
             Donnez la position d'origine du bloc (x,y) :
             Quelle direction voulez-vous insérer? ('haut', 'bas', 'gauche', 'droite') :
         """
-        pass
+        origine = _récupérer_position_valide("Donnez la position d'origine du bloc (x,y) : ")
+        direction = _récupérer_direction_valide()
+
+        return origine, direction
 
 
 def analyser_commande():
