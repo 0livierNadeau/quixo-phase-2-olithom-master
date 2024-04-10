@@ -65,7 +65,7 @@ def débuter_partie(idul,  secret):
         tuple: Tuple de 3 éléments constitué de l'identifiant de la partie en cours,
             de la liste des joueurs et de l'état du plateau.
     """
-    url = f"{URL}parties"
+    url = f"{URL}partie"
     reponse = requests.post(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
@@ -97,7 +97,7 @@ def récupérer_partie(id_partie, idul, secret):
             de la liste des joueurs, de l'état du plateau et du vainqueur.
     """
 
-    url = f"{URL}parties/{id_partie}"
+    url = f"{URL}partie/{id_partie}"
     reponse = requests.get(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
 
     if reponse.status_code == 200:
