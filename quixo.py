@@ -72,6 +72,9 @@ class Quixo:
             origine (list[int]): La position (x, y) du pion sur le plateau.
             direction (str): La direction du déplacement, soit "haut", "bas", "gauche" ou "droite".
         """
+        if self.plateau[origine[0] - 1][origine[1] - 1] != pion:  # Vérification du pion
+            raise QuixoError("Le pion à la position d'origine ne correspond pas au joueur.")
+
         try:
             self.plateau.insertion(pion, origine, direction)
         except QuixoError as e:
@@ -96,10 +99,27 @@ class Quixo:
             Donnez la position d'origine du bloc (x,y) :
             Quelle direction voulez-vous insérer? ('haut', 'bas', 'gauche', 'droite') :
         """
-        origine = _récupérer_position_valide("Donnez la position d'origine du bloc (x,y) : ")
-        direction = _récupérer_direction_valide()
+        while True:
+            try:
+                x, y = map(int, input("Donnez la position d'origine du bloc (x,y) : ").split())
+                if not 1 <= x <= 5:
+                    raise QuixoError("La position x doit être entre 1 et 5 inclusivement.")
+                if not 1 <= y <= 5:
+                    raise QuixoError("La position y doit être entre 1 et 5 inclusivement.")
 
-        return origine, direction
+                origine = [x, y]
+
+                direction = input("Quelle direction voulez-vous insérer? ('haut', 'bas', 'gauche', 'droite') : ")
+                if direction not in ("haut", "bas", "gauche", "droite"):
+                    raise QuixoError("La direction doit être 'haut', 'bas', 'gauche' ou 'droite'.")
+
+                return origine, direction
+
+            except ValueError:
+                print("Les positions x et y doivent être des nombres entiers.")
+            except QuixoError as e:
+                print(e)
+
 
 
 def analyser_commande():
