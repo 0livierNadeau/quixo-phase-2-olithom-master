@@ -41,7 +41,10 @@ class Plateau:
         Returns:
             str: Une représentation en chaîne de caractères du plateau.
         """
-        pass
+        lignes = []
+        for ligne in self.plateau:
+            lignes.append("| ".join(ligne))
+        return "\n".join(lignes)
 
     def __getitem__(self, position):
         """Retourne la valeur à la position donnée
