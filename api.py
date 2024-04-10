@@ -37,7 +37,7 @@ def lister_parties(idul, secret):
     """
 
     url = f"{URL}parties"
-    reponse = requests.get(url, params={"idul": idul, "secret": secret}, timeout=TIMEOUT)
+    reponse = requests.get(url, auth=(idul, secret))
 
     if reponse.status_code == 200:
         return reponse.json()["parties"]
