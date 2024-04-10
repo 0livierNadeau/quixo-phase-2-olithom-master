@@ -17,7 +17,7 @@ URL = "https://pax.ulaval.ca/quixo/api/h24/"
 
 
 def lister_parties(idul, secret):
-    """Lister les parties
+    """Lister les parties..
 
   Args:
     idul (str): idul du joueur
