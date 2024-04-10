@@ -1,0 +1,123 @@
+#pour une raison quelconque je peux pas update le projet sur vscode meme quand je le clonde il reste a la premiere version alors voici le code que jai fait
+
+#class plateau
+
+class Plateau:
+    def __init__(self, plateau=None):
+        if plateau is None:
+            self.plateau = self.construire_plateau()
+        else:
+            self.plateau = self.construire_plateau(plateau)
+
+    def __str__(self):
+        plateau_str = ""
+        for ligne in self.plateau:
+            plateau_str += "|"
+            for case in ligne:
+                plateau_str += " " + case + " |"
+            plateau_str += "\n"
+        return plateau_str
+
+    def construire_plateau(self, plateau=None):
+        if plateau is None:
+            return [[" " for _ in range(5)] for _ in range(5)]
+        else:
+            if len(plateau) != 5:
+                raise QuixoError("Le plateau doit être une liste de 5 listes de 5 éléments.")
+            for ligne in plateau:
+                if len(ligne) != 5:
+                    raise QuixoError("Le plateau doit être une liste de 5 listes de 5 éléments.")
+                for case in ligne:
+                    if case not in [" ", "X", "O"]:
+                        raise QuixoError("Le plateau ne doit contenir que des espaces, des X ou des O.")
+            return plateau
+
+    def __getitem__(self, position):
+        x, y = position
+        if not (0 <= x < 5 and 0 <= y < 5):
+            raise QuixoError("Coordonnées invalides.")
+        return self.plateau[x][y]
+
+    def __setitem__(self, position, value):
+        x, y = position
+        if not (0 <= x < 5 and 0 <= y < 5):
+            raise QuixoError("Coordonnées invalides.")
+        self.plateau[x][y] = value
+
+    def insertion_par_le_bas(self, position, pion):
+        x, y = position
+        if not (0 <= y < 5):
+            raise QuixoError("Coordonnées de la colonne invalide.")
+        for i in range(5):
+            self.plateau[i][y] = pion
+
+    def insertion_par_le_haut(self, position, pion):
+        x, y = position
+        if not (0 <= y < 5):
+            raise QuixoError("Coordonnées de la colonne invalide.")
+        for i in range(4, -1, -1):
+            self.plateau[i][y] = pion
+
+    def insertion_par_la_gauche(self, position, pion):
+        x, y = position
+        if not (0 <= x < 5):
+            raise QuixoError("Coordonnées de la rangée invalide.")
+        for i in range(5):
+            self.plateau[x][i] = pion
+
+    def insertion_par_la_droite(self, position, pion):
+        x, y = position
+        if not (0 <= x < 5):
+            raise QuixoError("Coordonnées de la rangée invalide.")
+        for i in range(4, -1, -1):
+            self.plateau[x][i] = pion
+
+    def insertion(self, position, direction, pion):
+        x, y = position
+        if direction == "haut":
+            self.insertion_par_le_haut(position, pion)
+        elif direction == "bas":
+            self.insertion_par_le_bas(position, pion)
+        elif direction == "gauche":
+            self.insertion_par_la_gauche(position, pion)
+        elif direction == "droite":
+            self.insertion_par_la_droite(position, pion)
+        else:
+            raise QuixoError("Direction invalide.")
+
+    def état_plateau(self):
+        import copy
+        return copy.deepcopy(self.plateau)
+
+#class quixo :
+
+
+class Quixo:
+    def __init__(self, joueurs, plateau=None):
+        self.joueurs = joueurs
+        self.plateau = Plateau(plateau)
+
+    def __str__(self):
+        return f"{formater_légende(self.joueurs)}\n{str(self.plateau)}"
+
+    def déplacer_pion(self, joueur, position, direction):
+        if joueur not in self.joueurs:
+            raise QuixoError("Joueur invalide.")
+        
+        try:
+            self.plateau.insertion(position, direction, joueur)
+        except QuixoError as e:
+            raise QuixoError(f"Impossible de déplacer le pion : {str(e)}")
+
+    def récupérer_le_coup(self, joueur):
+        print(f"Tour du joueur {joueur}")
+        position = tuple(map(int, input("Donnez la position d'origine du pion (x, y) : ").split(',')))
+        direction = input("Quelle direction voulez-vous insérer ? ('haut', 'bas', 'gauche', 'droite') : ")
+
+        if direction not in ['haut', 'bas', 'gauche', 'droite']:
+            raise QuixoError("Direction invalide.")
+        
+        return position, direction
+
+
+
