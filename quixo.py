@@ -53,8 +53,13 @@ class Quixo:
         Returns:
             str: Une représentation en chaîne de caractères du plateau.
         """
-        legende = formater_legende(self.joueurs)
-        jeu = formater_jeu(self.plateau)
+        legende = """
+            Légende:
+            X: Pion du joueur 1
+            O: Pion du joueur 2
+        """
+        plateau = self.plateau.état_plateau()
+        jeu = "\n".join(" ".join(ligne) for ligne in plateau)
         return legende + "\n" + jeu
 
     def déplacer_pion(self, pion, origine, direction):
